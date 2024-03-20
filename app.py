@@ -7,6 +7,7 @@ from datetime import datetime
 from pymongo import MongoClient
 import zipfile
 
+#testar denna
 # Ange projektmappen och den statiska mappen för Flask-appen
 project_folder = os.path.dirname(os.path.abspath(__file__))
 static_folder = os.path.join(project_folder, 'static')
