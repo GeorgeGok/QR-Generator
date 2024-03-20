@@ -148,3 +148,4 @@ def download_qr_codes(folder_date):
 # Starta Flask-appen
 if __name__ == '__main__':
     app.run(debug=True)
+#hej
