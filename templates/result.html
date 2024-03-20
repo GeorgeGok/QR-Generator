@@ -88,12 +88,13 @@
     <div class="container">
         <h1>Resultat</h1>
         <div class="result-container">
-            <p>Antal genererade QR-koder: {{ qr_count }}</p>
+            {% set iQRCount = qr_count - 1 %}
+            <p>Antal genererade QR-koder: {{ iQRCount }}</p>
             {% if qr_count > 0 %}
             <a href="{{ url_for('download_qr_codes', folder_date=folder_date) }}" class="download-button">Ladda ner ZIP-filen</a>
             {% endif %}
             <div class="qr-code-container">
-                {% for i in range(1, qr_count + 1) %}
+                {% for i in range(1, iQRCount + 1) %}
                     {% set index = i - 1 %}
                     {% set sku = sku_list[index] %}
                     <div class="qr-code-wrapper">

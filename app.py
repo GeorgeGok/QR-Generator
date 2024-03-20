@@ -66,10 +66,10 @@ def generate_qr_codes(quantity, sku, folder_date):
             qr_code = pyqrcode.create(link + '&UID=' + new_guid)
             file_name = os.path.join(qr_folder, f"{str(qr_count).zfill(2)}_qr_{current_sku}.png")
             qr_code.png(file_name, scale=5)
-            qr_count += 1
             sku_list.append(current_sku)
             timestamps.append(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-            links.append(link + '&UID=' + new_guid)  
+            links.append(link + '&UID=' + new_guid)
+            qr_count += 1
 
     return qr_count, sku_list, timestamps, links, uuid_list  
 
@@ -86,7 +86,7 @@ def generate_qr():
     quantity_input_specific = request.form.get('quantityInputSpecific')
     sku = request.form.get('skuInput')
 
-    qr_count = 1
+    qr_count = 0
     sku_list = []
     timestamps = []
     links = []  
@@ -96,7 +96,7 @@ def generate_qr():
 
     if generator_option == 'all':
         if quantity_input_all:
-            qr_count, sku_list, timestamps, links, uuid = generate_qr_codes(quantity_input_all, None, folder_date)
+            qr_count, sku_list, timestamps, links, uuid = generate_qr_codes(None, None, folder_date)
     elif generator_option == 'quantity':
         if quantity_input_all:
             qr_count, sku_list, timestamps, links, uuid = generate_qr_codes(quantity_input_all, None, folder_date)
