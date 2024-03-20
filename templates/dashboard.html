@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <style>
+        /* Allmän styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Stilar för paneler */
+        .panel {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* Stilar för knappar */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #309676;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #28795f;
+        }
+
+        /* Stilar för tabeller */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #309676;
+            color: #fff;
+            text-align: left;
+        }
+
+        /* Stilar för formulär */
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>QR Code Generator Dashboard</h1>
+
+    <!-- Panel för att generera QR-koder -->
+    <div class="panel">
+        <h2>Generera QR-koder</h2>
+        <form action="/generate_qr" method="post">
+            <label for="generatorOption">Välj alternativ:</label>
+            <select name="generatorOption" id="generatorOption">
+                <option value="all">Generera QR-koder för alla SKU:er</option>
+                <option value="quantity">Generera QR-koder för antal SKU:er</option>
+                <option value="specific">Generera QR-koder för specifik SKU</option>
+            </select>
+
+            <div id="quantityInputContainer" style="display: none;">
+                <label for="quantityInput">Antal QR-koder:</label>
+                <input type="number" name="quantityInput" id="quantityInput" value="1">
+            </div>
+
+            <div id="skuInputContainer" style="display: none;">
+                <label for="skuInput">Välj SKU:</label>
+                <select name="skuInput" id="skuInput">
+                    <!-- SKU-lista kommer att fyllas här via JavaScript -->
+                </select>
+            </div>
+
+            <button type="submit" class="btn">Generera QR-koder</button>
+        </form>
+    </div>
+
+    <!-- Panel för nedladdning av QR-koder -->
+    <div class="panel">
+        <h2>Nedladdning av QR-koder</h2>
+        <p>Genererade QR-koder kan laddas ner som en ZIP-fil.</p>
+        <a href="/download_qr_codes/{{ folder_date }}" class="btn">Ladda ner QR-koder</a>
+    </div>
+
+    <!-- Panel för lista över QR-koder -->
+    <div class="panel">
+        <h2>Lista över QR-koder</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tidstämpel</th>
+                    <th>SKU</th>
+                    <th>UUID</th>
+                    <th>Länk</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- QR-koderna kommer att fyllas här via Flask-template -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // Funktion för att visa eller dölja inmatningsfält beroende på val i rullgardinsmenyn
+    document.getElementById('generatorOption').addEventListener('change', function() {
+        var quantityInputContainer = document.getElementById('quantityInputContainer');
+        var skuInputContainer = document.getElementById('skuInputContainer');
+
+        if (this.value === 'quantity') {
+            quantityInputContainer.style.display = 'block';
+            skuInputContainer.style.display = 'none';
+        } else if (this.value === 'specific') {
+            quantityInputContainer.style.display = 'none';
+            skuInputContainer.style.display = 'block';
+        } else {
+            quantityInputContainer.style.display = 'none';
+            skuInputContainer.style.display = 'none';
+        }
+    });
+</script>
+
+</body>
+</html>
