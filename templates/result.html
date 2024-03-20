@@ -93,15 +93,15 @@
             <a href="{{ url_for('download_qr_codes', folder_date=folder_date) }}" class="download-button">Ladda ner ZIP-filen</a> <!-- Knapp för att ladda ner ZIP-filen -->
             {% endif %}
             <div class="qr-code-container"> <!-- Kontainer för QR-koderna -->
-                {% for i in range(qr_count) %} <!-- Loopa genom QR-koderna -->
-                    {% set sku = sku_list[i] %} <!-- Hämta SKU för QR-koden -->
+                {% for i in range(1, qr_count + 1) %} <!-- Loopa från 1 till qr_count -->
+                    {% set sku = sku_list[i - 1] %} <!-- Hämta SKU för QR-koden -->
                     <div class="qr-code-wrapper">
-                        <p>{{ timestamps[i] }}</p> <!-- Visa tidstämpeln över QR-koden -->
-                        <img src="{{ url_for('static', filename=folder_date + '/qr_' + sku|string + '_' + i|string + '.png') }}" alt="QR Code {{ sku }}"> <!-- Visa QR-koderna -->
+                        <p>{{ timestamps[i - 1] }}</p> <!-- Visa tidstämpeln över QR-koden -->
+                        <img src="{{ url_for('static', filename=folder_date + '/' + "%02d" % i + '_qr_' + sku|string + '.png') }}" alt="QR Code {{ sku }}"> <!-- Visa QR-koderna -->
                         <div class="additional-content"> <!-- Kontainer för tilläggsinnehåll -->
                             <p>SKU: {{ sku }}</p> <!-- Visa SKU för QR-koden -->
-                            <p>UUID: {{ uuid[i] }}</p> <!-- Visa UUID för QR-koden -->
-                            <p>Länk: <a href="{{ links[i] }}">{{ links[i] }}</a></p> <!-- Visa länken med UUID -->
+                            <p>UUID: {{ uuid[i - 1] }}</p> <!-- Visa UUID för QR-koden -->
+                            <p>Länk: <a href="{{ links[i - 1] }}">{{ links[i - 1] }}</a></p> <!-- Visa länken med UUID -->
                         </div>
                     </div>
                 {% endfor %}

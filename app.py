@@ -3,11 +3,10 @@ from flask import Flask, render_template, request, jsonify, send_file
 import os
 import uuid
 import pyqrcode
+import zipfile
 from datetime import datetime
 from pymongo import MongoClient
-import zipfile
 
-#testar denna
 # Ange projektmappen och den statiska mappen för Flask-appen
 project_folder = os.path.dirname(os.path.abspath(__file__))
 static_folder = os.path.join(project_folder, 'static')
@@ -39,7 +38,7 @@ def generate_qr_codes(quantity, sku, folder_date):
 
     documents = fetch_data_from_mongodb()
 
-    qr_count = 0
+    qr_count = 1
     sku_list = []
     timestamps = []
     links = []  
@@ -65,7 +64,7 @@ def generate_qr_codes(quantity, sku, folder_date):
             uuid_list.append(new_guid)
 
             qr_code = pyqrcode.create(link + '&UID=' + new_guid)
-            file_name = os.path.join(qr_folder, f"qr_{current_sku}_{qr_count}.png")
+            file_name = os.path.join(qr_folder, f"{str(qr_count).zfill(2)}_qr_{current_sku}.png")
             qr_code.png(file_name, scale=5)
             qr_count += 1
             sku_list.append(current_sku)
@@ -149,4 +148,3 @@ def download_qr_codes(folder_date):
 # Starta Flask-appen
 if __name__ == '__main__':
     app.run(debug=True)
-#hej
