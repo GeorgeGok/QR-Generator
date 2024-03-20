@@ -41,8 +41,8 @@ def generate_qr_codes(quantity, sku, folder_date):
     qr_count = 1
     sku_list = []
     timestamps = []
-    links = []  
-    uuid_list = []  
+    links = []
+    uuid_list = []
 
     for doc in documents:
         produkt_data = doc.get('Produkt-data', [])
@@ -86,7 +86,7 @@ def generate_qr():
     quantity_input_specific = request.form.get('quantityInputSpecific')
     sku = request.form.get('skuInput')
 
-    qr_count = 0
+    qr_count = 1
     sku_list = []
     timestamps = []
     links = []  
