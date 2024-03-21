@@ -1,5 +1,5 @@
 # Importera nödvändiga bibliotek
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, request, jsonify
 import os
 import uuid  # Importera uuid
 import pyqrcode
@@ -76,7 +76,7 @@ def generate_qr_codes(quantity, sku, folder_date):
 # Hemrutt för att rendera indexsidan
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return app.send_static_file('index.html')
 
 # Rutten för att generera QR-koder baserat på formulärdata
 @app.route('/generate_qr', methods=['POST'])
@@ -105,7 +105,7 @@ def generate_qr():
             if quantity_input_specific:
                 qr_count, sku_list, timestamps, links, uuid = generate_qr_codes(quantity_input_specific, sku, folder_date)
 
-    return render_template('result.html', qr_count=qr_count, sku_list=sku_list, timestamps=timestamps, links=links, folder_date=folder_date, uuid=uuid)  # Skicka med uuid till mallen
+    return app.send_static_file('result.html', qr_count=qr_count, sku_list=sku_list, timestamps=timestamps, links=links, folder_date=folder_date, uuid=uuid)  # Skicka med uuid till mallen
 
 # Funktion för att hämta SKUs från databasen
 def fetch_skus_from_database():
