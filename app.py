@@ -76,7 +76,7 @@ def generate_qr_codes(quantity, sku, folder_date):
 # Hemrutt för att rendera indexsidan
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('indexQR.html')
 
 # Rutten för att generera QR-koder baserat på formulärdata
 @app.route('/generate_qr', methods=['POST'])
