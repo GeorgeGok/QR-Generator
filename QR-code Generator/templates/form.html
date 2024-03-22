@@ -186,7 +186,7 @@
                     <div class="col-sm-12 col-xl-6">
                         <div class="bg-secondary rounded h-100 p-4">
                             <h6 class="mb-4">Generera för alla SKU:er</h6>
-                            <form>
+                            <form  action="/generate_qr" method="post">
                                 <div class="mb-3">
                                     <div class="option">
                                         <input type="hidden" name="generatorOption" id="option1" value="all" checked>
@@ -558,6 +558,20 @@
 
     <!-- Template Javascript -->
     <script src="/static/qr_codes/js/main.js"></script>
+
+    <script>
+        fetch('/get_skus')
+            .then(response => response.json())
+            .then(data => {
+                var selectElement = document.getElementById('skuInput');
+                data.skus.forEach(sku => {
+                    var option = document.createElement('option');
+                    option.value = sku;
+                    option.textContent = sku;
+                    selectElement.appendChild(option);
+                });
+            });
+    </script>
 </body>
 
 </html>

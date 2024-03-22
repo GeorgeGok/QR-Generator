@@ -76,7 +76,7 @@ def generate_qr_codes(quantity, sku, folder_date):
 # Hemrutt för att rendera indexsidan
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('form.html')
 
 # Rutten för att generera QR-koder baserat på formulärdata
 @app.route('/generate_qr', methods=['POST'])
@@ -96,7 +96,7 @@ def generate_qr():
 
     if generator_option == 'all':
         if quantity_input_all:
-            qr_count, sku_list, timestamps, links, uuid = generate_qr_codes(quantity_input_all, None, folder_date)
+            qr_count, sku_list, timestamps, links, uuid = generate_qr_codes(None, None, folder_date)
     elif generator_option == 'quantity':
         if quantity_input_all:
             qr_count, sku_list, timestamps, links, uuid = generate_qr_codes(quantity_input_all, None, folder_date)
