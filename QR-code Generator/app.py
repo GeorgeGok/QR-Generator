@@ -82,9 +82,6 @@ def index():
 @app.route('/generate_qr', methods=['POST'])
 def generate_qr():
     generator_option = request.form.get('generatorOption')
-    quantity_input_all = request.form.get('quantityInput')
-    quantity_input_specific = request.form.get('quantityInputSpecific')
-    sku = request.form.get('skuInput')
 
     qr_count = 0
     sku_list = []
@@ -95,15 +92,14 @@ def generate_qr():
     folder_date = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
 
     if generator_option == 'all':
-        if quantity_input_all:
-            qr_count, sku_list, timestamps, links, uuid = generate_qr_codes(None, None, folder_date)
+        qr_count, sku_list, timestamps, links, uuid = generate_qr_codes(None, None, folder_date)
     elif generator_option == 'quantity':
-        if quantity_input_all:
-            qr_count, sku_list, timestamps, links, uuid = generate_qr_codes(quantity_input_all, None, folder_date)
+        quantity_input_all = request.form.get('quantityInput')
+        qr_count, sku_list, timestamps, links, uuid = generate_qr_codes(quantity_input_all, None, folder_date)
     elif generator_option == 'specific':
-        if sku:
-            if quantity_input_specific:
-                qr_count, sku_list, timestamps, links, uuid = generate_qr_codes(quantity_input_specific, sku, folder_date)
+        sku = request.form.get('skuInput')
+        quantity_input_specific = request.form.get('quantityInputSpecific')
+        qr_count, sku_list, timestamps, links, uuid = generate_qr_codes(quantity_input_specific, sku, folder_date)
 
     return render_template('result.html', qr_count=qr_count, sku_list=sku_list, timestamps=timestamps, links=links, folder_date=folder_date, uuid=uuid)  # Skicka med uuid till mallen
 
