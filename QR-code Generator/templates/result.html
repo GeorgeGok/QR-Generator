@@ -191,24 +191,25 @@
                             </div>
                             <form  action="/generate_qr" method="post">
                                 <div class="mb-3">
-                                            <p>Antal genererade QR-koder: {{ qr_count }}</p>
-                                            {% if qr_count > 0 %}
-                                            <div class="qr-code-container">
-                                                {% for i in range(qr_count) %}
-                                                    {% set sku = sku_list[i] %}
-                                                    <div class="qr-code-wrapper">
-                                                        <p>{{ timestamps[i] }}</p>
-                                                        <img src="{{ url_for('static', filename=folder_date + '/qr_' + sku|string + '_' + i|string + '.png') }}" alt="QR Code {{ sku }}">
-                                                        <div class="additional-content">
-                                                            <p>SKU: {{ sku }}</p>
-                                                            <p>UUID: {{ uuid[i] }}</p>
-                                                            <p>Länk: <a href="{{ links[i] }}">{{ links[i] }}</a></p>
-                                                        </div>
-                                                    </div>
-                                                {% endfor %}
+                                    <p>Antal genererade QR-koder: {{ qr_count }}</p>
+                                    {% if qr_count > 0 %}
+                                    <div class="qr-code-container">
+                                        {% for i in range(qr_count) %}
+                                            {% set sku = sku_list[i] %}
+                                            <div class="qr-code-wrapper">
+                                                <p>{{ timestamps[i] }}</p>
+                                                <!-- Uppdatera sökvägen för att matcha det nya namnformatet för QR-koderna -->
+                                                <img src="{{ url_for('static', filename=folder_date + '/' + "%02d" % (i+1) + '_qr_' + sku + '.png') }}" alt="QR Code {{ sku }}">
+                                                <div class="additional-content">
+                                                    <p>SKU: {{ sku }}</p>
+                                                    <p>UUID: {{ uuid[i] }}</p>
+                                                    <p>Länk: <a href="{{ links[i] }}">{{ links[i] }}</a></p>
+                                                </div>
                                             </div>
-                                            {% endif %}
-                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
                                     </div>
                             </form>
                         </div>

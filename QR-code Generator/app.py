@@ -45,6 +45,8 @@ def generate_qr_codes(quantity, sku, folder_date):
     links = []  # Lägg till en tom lista för att lagra länkar med UUID
     uuid_list = []  # Lägg till en tom lista för att lagra UUIDs
 
+    global_qr_counter = 0  # Global räknare för alla QR-koder
+
     for doc in documents:
         produkt_data = doc.get('Produkt-data', [])
         if not produkt_data:
@@ -60,15 +62,21 @@ def generate_qr_codes(quantity, sku, folder_date):
         if not link:
             continue
 
-        for _ in range(int(quantity) if quantity else 1):
-            # Generera en ny unik identifierare för varje QR-kod
+        if not quantity:
+            quantity = 1
+
+        quantity = int(quantity)
+
+        for _ in range(quantity):
+            qr_count += 1
+            global_qr_counter += 1
             new_guid = str(uuid.uuid4())
             uuid_list.append(new_guid)
 
             qr_code = pyqrcode.create(link + '&UID=' + new_guid)
-            file_name = os.path.join(qr_folder, f"qr_{current_sku}_{qr_count}.png")
+            file_name = os.path.join(qr_folder, f"{str(global_qr_counter).zfill(2)}_qr_{current_sku}.png")
             qr_code.png(file_name, scale=5)
-            qr_count += 1
+
             sku_list.append(current_sku)
             timestamps.append(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
             links.append(link + '&UID=' + new_guid)  # Lägg till länken med UUID i listan
@@ -96,10 +104,13 @@ def download_qr_codes():
     # Återställ bufferns pekare till början
     zip_buffer.seek(0)
 
+    # Skapa namnet på zip-filen baserat på datumet och tiden för QR-kodernas generering
+    zip_file_name = f"qr_codes_{folder_date}.zip"
+
     # Skapa en Flask-respons och lägg till zip-filen som en bifogad fil
     response = make_response(zip_buffer.getvalue())
     response.headers['Content-Type'] = 'application/zip'
-    response.headers['Content-Disposition'] = 'attachment; filename=qr_codes.zip'
+    response.headers['Content-Disposition'] = f'attachment; filename={zip_file_name}'
     
     return response
 
