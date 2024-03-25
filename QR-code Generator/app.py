@@ -1,8 +1,10 @@
 # Importera nödvändiga bibliotek
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_file
 import os
 import uuid  # Importera uuid
 import pyqrcode
+import zipfile
+from io import BytesIO
 from datetime import datetime
 from pymongo import MongoClient
 
@@ -72,6 +74,34 @@ def generate_qr_codes(quantity, sku, folder_date):
             links.append(link + '&UID=' + new_guid)  # Lägg till länken med UUID i listan
 
     return qr_count, sku_list, timestamps, links, uuid_list  # Returnera också UUIDs
+
+# Ny ruttfunktion för att ladda ner QR-koderna som en zip-fil
+from flask import make_response
+
+@app.route('/download_qr_codes')
+def download_qr_codes():
+    folder_date = request.args.get('folder_date')  # Hämta mappen med QR-koder baserat på datumet
+    qr_folder = os.path.join(static_folder, folder_date)
+
+    # Skapa en temporär minnesbuffert för att skapa zip-filen
+    zip_buffer = BytesIO()
+
+    with zipfile.ZipFile(zip_buffer, 'a', zipfile.ZIP_DEFLATED, False) as zip_file:
+        # Lägg till varje QR-kod i zip-filen
+        for root, _, files in os.walk(qr_folder):
+            for file in files:
+                file_path = os.path.join(root, file)
+                zip_file.write(file_path, os.path.relpath(file_path, qr_folder))
+
+    # Återställ bufferns pekare till början
+    zip_buffer.seek(0)
+
+    # Skapa en Flask-respons och lägg till zip-filen som en bifogad fil
+    response = make_response(zip_buffer.getvalue())
+    response.headers['Content-Type'] = 'application/zip'
+    response.headers['Content-Disposition'] = 'attachment; filename=qr_codes.zip'
+    
+    return response
 
 # Hemrutt för att rendera indexsidan
 @app.route('/')

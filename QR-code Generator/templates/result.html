@@ -186,6 +186,9 @@
                     <div class="col-sm-12 col-xl-6">
                         <div class="bg-secondary rounded h-100 p-4">
                             <h6 class="mb-4">Resultat</h6>
+                            <div class="text-center mt-4">
+                                <a href="/download_qr_codes?folder_date={{ folder_date }}" class="btn btn-primary">Ladda ner QR-koder som zip-fil</a>
+                            </div>
                             <form  action="/generate_qr" method="post">
                                 <div class="mb-3">
                                             <p>Antal genererade QR-koder: {{ qr_count }}</p>
